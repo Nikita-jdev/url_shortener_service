@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,10 +17,11 @@ public class HashRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public List<Long> getUniqueNumbers(long uniqueNumbers) {
-        String sql = "SELECT nextval('unique_numbers_seq') FROM generate_series(1, ?)";
+        String sql = "SELECT nextval('unique_number_sequence') FROM generate_series(1, ?)";
         return jdbcTemplate.queryForList(sql, Long.class, uniqueNumbers);
     }
 
+    @Transactional
     public void save(List<Hash> hashes) {
         jdbcTemplate.batchUpdate("INSERT INTO hash VALUES (?)", new BatchPreparedStatementSetter() {
             @Override
@@ -35,8 +37,8 @@ public class HashRepository {
     }
 
     public List<Hash> getHashBatch(long uniqueNumbers) {
-       return jdbcTemplate.queryForList(
-               "DELETE FROM hash where ctid IN (SELECT ctid FROM hash LIMIT ?) RETURNING *",
-               Hash.class, uniqueNumbers);
+        return jdbcTemplate.queryForList(
+                "DELETE FROM hash where ctid IN (SELECT ctid FROM hash LIMIT ?) RETURNING *",
+                Hash.class, uniqueNumbers);
     }
 }

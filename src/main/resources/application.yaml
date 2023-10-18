@@ -14,8 +14,22 @@ spring:
       hibernate:
         format_sql: true
 
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
   liquibase:
-    changelog: classpath:db/changelog/db.changelog-master.yaml
+    changelog: classpath:/db/changelog/db.changelog-master.yaml
+
+  async_config:
+    core_pool_size: 5
+    max_pool_size: 10
+    queue_capacity: 50
+    thread_name_prefix: AsyncTaskThread
+
+  config:
+    import: value.yaml
 
 server:
   port: 8080
@@ -23,3 +37,9 @@ server:
 logging:
   level:
     root: info
+
+executor_thread_pool:
+  queue_capacity: 100
+  max_pool_size: 10
+  core_pool_size: 10
+  thread_name_prefix: ExecutorTaskThread
