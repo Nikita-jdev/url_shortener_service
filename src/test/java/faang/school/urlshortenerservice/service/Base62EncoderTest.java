@@ -2,7 +2,10 @@ package faang.school.urlshortenerservice.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +14,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class Base62EncoderTest {
     @InjectMocks
     private Base62Encoder base62Encoder;
@@ -20,7 +24,8 @@ class Base62EncoderTest {
 
     @BeforeEach
     public void setUp() {
-        base62Encoder = new Base62Encoder(base62Chars, batchSize);
+        ReflectionTestUtils.setField(base62Encoder, "BASE62_CHARS", base62Chars);
+        ReflectionTestUtils.setField(base62Encoder, "BATCH_SIZE", batchSize);
     }
 
     @Test
