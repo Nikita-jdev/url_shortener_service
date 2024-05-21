@@ -17,9 +17,22 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 server:
-  port: 8080
+  port: 8090
 
 logging:
   level:
     root: info
+
+hash:
+  alphabet: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  batch-size: 10
+  base: 62
+  cache:
+    capacity: 10
+    fill-percent: 20
